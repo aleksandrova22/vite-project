@@ -1,25 +1,22 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import './App.css';
-
 export type ToDo = { id: number; text: string };
 
 
+
 export class ToDoItem {
-
   id = Math.random();
-
-  constructor(text: string) {
-    Object.assign(this, { text });
+  constructor(text: string | '') {
+    Object.assign(this, { text, id: Math.random() });
   }
-
 }
+
 
 function App() {
   const [count, setCount] = useState(0),
     [value, setValue] = useState(''),
-    [list, setList] = useState([]);
-
-
+    [list, setList] = useState([] as any),
+    delItem = (id: number) => { setList([...list].filter(item => item.id != id)) };
   return <>
     <h2>Vite + React</h2>
     <fieldset>
@@ -34,21 +31,14 @@ function App() {
       <input value={value} onChange={event => setValue(event.target.value)} />
 
       <button onClick={() => setList([...list, new ToDoItem(value)])}>➕add</button>
-
       <ol>
         {[...list].map(({ id, text }) => <li key={id}>
-
           {text}
+          <button onClick={() => delItem(id)}>❌</button>
 
-          <button onClick={(id) => setList(list.filter(elem => elem.id !== id))}>❌</button>
         </li>)
-
         }
-
-
       </ol>
-
-
     </fieldset>
 
   </>
